@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alarm Clock</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="image/clock.png" type="image/png">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header id="header">
+    <div class="header-content">
+      <h1>ALARM CLOCK</h1>
+      <div id="time"></div>
+      <div class="logo-section">
+        <img src="image/spkt.png" alt="Logo" id="logo" />
+        <span>HCMUTE</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="layout-container">
+      <!-- Alarm Settings (Left) -->
+      <div class="alarm-container">
+        <h2>ALARM SETTINGS</h2>
+        <div class="alarm-card">
+          <div class="alarm-field">
+            <label>Alarm Month</label>
+            <button class="adjust-btn" onclick="adjustAlarm('month', -1)">-</button>
+            <span id="alarmMonth">04</span>
+            <button class="adjust-btn" onclick="adjustAlarm('month', 1)">+</button>
+          </div>
+          <div class="alarm-field">
+            <label>Alarm Day</label>
+            <button class="adjust-btn" onclick="adjustAlarm('day', -1)">-</button>
+            <span id="alarmDay">20</span>
+            <button class="adjust-btn" onclick="adjustAlarm('day', 1)">+</button>
+          </div>
+          <div class="alarm-field">
+            <label>Alarm Hour</label>
+            <button class="adjust-btn" onclick="adjustAlarm('hour', -1)">-</button>
+            <span id="alarmHour">10</span>
+            <button class="adjust-btn" onclick="adjustAlarm('hour', 1)">+</button>
+          </div>
+          <div class="alarm-field">
+            <label>Alarm Minute</label>
+            <button class="adjust-btn" onclick="adjustAlarm('minute', -1)">-</button>
+            <span id="alarmMinute">33</span>
+            <button class="adjust-btn" onclick="adjustAlarm('minute', 1)">+</button>
+          </div>
+          <div class="alarm-field">
+            <label>Alarm Enable</label>
+            <label class="switch">
+              <input type="checkbox" id="alarmEnable">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="alarm-field">
+            <button class="save-btn" onclick="saveAlarm()">Save Alarm</button>
+          </div>
+        </div>
+        <h2>SAVED ALARMS</h2>
+        <div class="alarm-list" id="alarmList">
+          <!-- Danh sách báo thức sẽ được thêm động bằng JavaScript -->
+        </div>
+      </div>
+
+      <!-- Temperature and Humidity (Center) -->
+      <div class="weather-container">
+        <div class="weather-box">
+          <img src="image/temperature.png" alt="Temperature" class="weather-icon" />
+          <h2>Temperature</h2>
+          <p id="nhietdo">1.0 °C</p>
+        </div>
+        <div class="weather-box">
+          <img src="image/humidity.png" alt="Humidity" class="weather-icon" />
+          <h2>Humidity</h2>
+          <p id="doam">0.0 %</p>
+        </div>
+      </div>
+
+      <!-- Charts (Right) -->
+      <div class="chart-container">
+        <div class="chart-box">
+          <h2>Temperature Chart</h2>
+          <canvas id="tempChart"></canvas>
+        </div>
+        <div class="chart-box">
+          <h2>Humidity Chart</h2>
+          <canvas id="humidityChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer">
+    <ul>
+      <li>Nguyễn Phạm Huy Hoàng_22161125</li>
+      <li>Trần Nguyễn Gia Huy_22161129</li>
+    </ul>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.10/firebase-analytics.js"></script>
+  <script src="function.js"></script>
+</body>
+</html>

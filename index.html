@@ -26,45 +26,212 @@
       <!-- Alarm Settings (Left) -->
       <div class="alarm-container">
         <h2>ALARM SETTINGS</h2>
-        <div class="alarm-card">
-          <div class="alarm-field">
-            <label>Alarm Month</label>
-            <button class="adjust-btn" onclick="adjustAlarm('month', -1)">-</button>
-            <span id="alarmMonth">04</span>
-            <button class="adjust-btn" onclick="adjustAlarm('month', 1)">+</button>
+        <div class="alarm-scrollable">
+          <!-- Alarm 1 -->
+          <div class="alarm-card">
+            <div class="alarm-header">
+              <h3>Alarm 1</h3>
+              <button class="delete-btn" onclick="deleteAlarm(1)">X</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Month</label>
+              <button class="adjust-btn" onclick="adjustAlarm('month', -1, 1)">-</button>
+              <span id="alarmMonth1">04</span>
+              <button class="adjust-btn" onclick="adjustAlarm('month', 1, 1)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Day</label>
+              <button class="adjust-btn" onclick="adjustAlarm('day', -1, 1)">-</button>
+              <span id="alarmDay1">20</span>
+              <button class="adjust-btn" onclick="adjustAlarm('day', 1, 1)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Hour</label>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', -1, 1)">-</button>
+              <span id="alarmHour1">10</span>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', 1, 1)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Minute</label>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', -1, 1)">-</button>
+              <span id="alarmMinute1">33</span>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', 1, 1)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Enable</label>
+              <label class="switch">
+                <input type="checkbox" id="alarmEnable1">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="alarm-field">
+              <button class="save-btn" onclick="saveAlarm(1)">Save Alarm 1</button>
+            </div>
           </div>
-          <div class="alarm-field">
-            <label>Alarm Day</label>
-            <button class="adjust-btn" onclick="adjustAlarm('day', -1)">-</button>
-            <span id="alarmDay">20</span>
-            <button class="adjust-btn" onclick="adjustAlarm('day', 1)">+</button>
+          <!-- Alarm 2 -->
+          <div class="alarm-card">
+            <div class="alarm-header">
+              <h3>Alarm 2</h3>
+              <button class="delete-btn" onclick="deleteAlarm(2)">X</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Month</label>
+              <button class="adjust-btn" onclick="adjustAlarm('month', -1, 2)">-</button>
+              <span id="alarmMonth2">04</span>
+              <button class="adjust-btn" onclick="adjustAlarm('month', 1, 2)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Day</label>
+              <button class="adjust-btn" onclick="adjustAlarm('day', -1, 2)">-</button>
+              <span id="alarmDay2">20</span>
+              <button class="adjust-btn" onclick="adjustAlarm('day', 1, 2)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Hour</label>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', -1, 2)">-</button>
+              <span id="alarmHour2">10</span>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', 1, 2)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Minute</label>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', -1, 2)">-</button>
+              <span id="alarmMinute2">33</span>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', 1, 2)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Enable</label>
+              <label class="switch">
+                <input type="checkbox" id="alarmEnable2">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="alarm-field">
+              <button class="save-btn" onclick="saveAlarm(2)">Save Alarm 2</button>
+            </div>
           </div>
-          <div class="alarm-field">
-            <label>Alarm Hour</label>
-            <button class="adjust-btn" onclick="adjustAlarm('hour', -1)">-</button>
-            <span id="alarmHour">10</span>
-            <button class="adjust-btn" onclick="adjustAlarm('hour', 1)">+</button>
+          <!-- Alarm 3 -->
+          <div class="alarm-card">
+            <div class="alarm-header">
+              <h3>Alarm 3</h3>
+              <button class="delete-btn" onclick="deleteAlarm(3)">X</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Month</label>
+              <button class="adjust-btn" onclick="adjustAlarm('month', -1, 3)">-</button>
+              <span id="alarmMonth3">04</span>
+              <button class="adjust-btn" onclick="adjustAlarm('month', 1, 3)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Day</label>
+              <button class="adjust-btn" onclick="adjustAlarm('day', -1, 3)">-</button>
+              <span id="alarmDay3">20</span>
+              <button class="adjust-btn" onclick="adjustAlarm('day', 1, 3)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Hour</label>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', -1, 3)">-</button>
+              <span id="alarmHour3">10</span>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', 1, 3)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Minute</label>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', -1, 3)">-</button>
+              <span id="alarmMinute3">33</span>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', 1, 3)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Enable</label>
+              <label class="switch">
+                <input type="checkbox" id="alarmEnable3">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="alarm-field">
+              <button class="save-btn" onclick="saveAlarm(3)">Save Alarm 3</button>
+            </div>
           </div>
-          <div class="alarm-field">
-            <label>Alarm Minute</label>
-            <button class="adjust-btn" onclick="adjustAlarm('minute', -1)">-</button>
-            <span id="alarmMinute">33</span>
-            <button class="adjust-btn" onclick="adjustAlarm('minute', 1)">+</button>
+          <!-- Alarm 4 -->
+          <div class="alarm-card">
+            <div class="alarm-header">
+              <h3>Alarm 4</h3>
+              <button class="delete-btn" onclick="deleteAlarm(4)">X</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Month</label>
+              <button class="adjust-btn" onclick="adjustAlarm('month', -1, 4)">-</button>
+              <span id="alarmMonth4">04</span>
+              <button class="adjust-btn" onclick="adjustAlarm('month', 1, 4)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Day</label>
+              <button class="adjust-btn" onclick="adjustAlarm('day', -1, 4)">-</button>
+              <span id="alarmDay4">20</span>
+              <button class="adjust-btn" onclick="adjustAlarm('day', 1, 4)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Hour</label>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', -1, 4)">-</button>
+              <span id="alarmHour4">10</span>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', 1, 4)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Minute</label>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', -1, 4)">-</button>
+              <span id="alarmMinute4">33</span>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', 1, 4)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Enable</label>
+              <label class="switch">
+                <input type="checkbox" id="alarmEnable4">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="alarm-field">
+              <button class="save-btn" onclick="saveAlarm(4)">Save Alarm 4</button>
+            </div>
           </div>
-          <div class="alarm-field">
-            <label>Alarm Enable</label>
-            <label class="switch">
-              <input type="checkbox" id="alarmEnable">
-              <span class="slider"></span>
-            </label>
+          <!-- Alarm 5 -->
+          <div class="alarm-card">
+            <div class="alarm-header">
+              <h3>Alarm 5</h3>
+              <button class="delete-btn" onclick="deleteAlarm(5)">X</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Month</label>
+              <button class="adjust-btn" onclick="adjustAlarm('month', -1, 5)">-</button>
+              <span id="alarmMonth5">04</span>
+              <button class="adjust-btn" onclick="adjustAlarm('month', 1, 5)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Day</label>
+              <button class="adjust-btn" onclick="adjustAlarm('day', -1, 5)">-</button>
+              <span id="alarmDay5">20</span>
+              <button class="adjust-btn" onclick="adjustAlarm('day', 1, 5)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Hour</label>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', -1, 5)">-</button>
+              <span id="alarmHour5">10</span>
+              <button class="adjust-btn" onclick="adjustAlarm('hour', 1, 5)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Minute</label>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', -1, 5)">-</button>
+              <span id="alarmMinute5">33</span>
+              <button class="adjust-btn" onclick="adjustAlarm('minute', 1, 5)">+</button>
+            </div>
+            <div class="alarm-field">
+              <label>Alarm Enable</label>
+              <label class="switch">
+                <input type="checkbox" id="alarmEnable5">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="alarm-field">
+              <button class="save-btn" onclick="saveAlarm(5)">Save Alarm 5</button>
+            </div>
           </div>
-          <div class="alarm-field">
-            <button class="save-btn" onclick="saveAlarm()">Save Alarm</button>
-          </div>
-        </div>
-        <h2>SAVED ALARMS</h2>
-        <div class="alarm-list" id="alarmList">
-          <!-- Danh sách báo thức sẽ được thêm động bằng JavaScript -->
         </div>
       </div>
 

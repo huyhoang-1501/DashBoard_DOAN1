@@ -1,4 +1,3 @@
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyB3Hm969BjdLhV-2i1auDazDejCLemAe34",
   authDomain: "project1-a91b7.firebaseapp.com",
@@ -13,7 +12,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
-// Interface elements for 5 alarms
 const elements = {
   temp: document.getElementById('nhietdo'),
   humi: document.getElementById('doam'),
@@ -25,7 +23,6 @@ const elements = {
   alarmEnable: []
 };
 
-// Initialize elements for each alarm
 for (let i = 1; i <= 5; i++) {
   elements.alarmDay[i] = document.getElementById(`alarmDay${i}`);
   elements.alarmMonth[i] = document.getElementById(`alarmMonth${i}`);
@@ -34,16 +31,14 @@ for (let i = 1; i <= 5; i++) {
   elements.alarmEnable[i] = document.getElementById(`alarmEnable${i}`);
 }
 
-// Sensor and chart data
 let sensorData = {
   temp: [],
   humi: [],
   timestamps: []
 };
 
-let alarms = Array(5).fill(null); // Fixed array for 5 alarms to match Arduino
+let alarms = Array(5).fill(null);
 
-// Initialize charts
 const ctxTemp = document.getElementById('tempChart').getContext('2d');
 const ctxHumidity = document.getElementById('humidityChart').getContext('2d');
 
@@ -54,16 +49,24 @@ const tempChart = new Chart(ctxTemp, {
     datasets: [{
       label: 'Temperature (°C)',
       data: sensorData.temp,
-      borderColor: '#e74c3c',
-      fill: false,
-      tension: 0.1
+      borderColor: '#ff6b6b',
+      backgroundColor: 'rgba(255, 107, 107, 0.2)',
+      fill: true,
+      tension: 0.3
     }]
   },
   options: {
     responsive: true,
+    plugins: {
+      tooltip: { enabled: true },
+      legend: { display: true }
+    },
     scales: {
-      x: { title: { display: true, text: 'Time' } },
-      y: { title: { display: true, text: 'Temperature (°C)' } }
+      x: { 
+        title: { display: false }, 
+        ticks: { display: false } // Ẩn nhãn trục x
+      },
+      y: { title: { display: true, text: 'Temperature (°C)' }, beginAtZero: false }
     }
   }
 });
@@ -75,28 +78,44 @@ const humidityChart = new Chart(ctxHumidity, {
     datasets: [{
       label: 'Humidity (%)',
       data: sensorData.humi,
-      borderColor: '#3498db',
-      fill: false,
-      tension: 0.1
+      borderColor: '#4dabf7',
+      backgroundColor: 'rgba(77, 171, 247, 0.2)',
+      fill: true,
+      tension: 0.3
     }]
   },
   options: {
     responsive: true,
+    plugins: {
+      tooltip: { enabled: true },
+      legend: { display: true }
+    },
     scales: {
-      x: { title: { display: true, text: 'Time' } },
-      y: { title: { display: true, text: 'Humidity (%)' } }
+      x: { 
+        title: { display: false }, 
+        ticks: { display: false } // Ẩn nhãn trục x
+      },
+      y: { title: { display: true, text: 'Humidity (%)' }, beginAtZero: false }
     }
   }
 });
 
-// Check Firebase connection
-database.ref('.info/connected').on('value', snap => {
-  console.log(snap.val() ? 'Connected to Firebase' : 'Disconnected from Firebase');
-});
+function showToast(message, type = 'success') {
+  Toastify({
+    text: message,
+    duration: 3000,
+    gravity: 'top',
+    position: 'right',
+    backgroundColor: type === 'success' ? '#2ecc71' : '#e74c3c',
+    stopOnFocus: true
+  }).showToast();
+}
 
-// Initialize sensor and alarm data
 function initializeData() {
-  // Listen for sensor data from /esp8266_data/sensors
+  database.ref('.info/connected').on('value', snap => {
+    console.log(snap.val() ? 'Connected to Firebase' : 'Disconnected from Firebase');
+  });
+
   database.ref('esp8266_data/sensors').on('value', snap => {
     try {
       const data = snap.val() || { temperature: 0.0, humidity: 0.0, timestamp: 0 };
@@ -104,27 +123,27 @@ function initializeData() {
       const date = new Date(timestamp);
       const timeStr = date.toLocaleTimeString();
 
-      // Update sensor data
       sensorData.timestamps.push(timeStr);
       sensorData.temp.push(data.temperature || 0.0);
       sensorData.humi.push(data.humidity || 0.0);
 
-      // Limit to 10 data points
       if (sensorData.timestamps.length > 10) {
         sensorData.timestamps.shift();
         sensorData.temp.shift();
         sensorData.humi.shift();
       }
 
-      // Update display and charts
       updateDisplay(data);
       updateCharts();
     } catch (error) {
       console.error('Error processing sensor data:', error);
+      showToast('Error fetching sensor data', 'error');
     }
-  }, error => console.error('Error listening to sensor data:', error));
+  }, error => {
+    console.error('Error listening to sensor data:', error);
+    showToast('Sensor data connection failed', 'error');
+  });
 
-  // Listen for alarms from /esp8266_data/alarms
   database.ref('esp8266_data/alarms').on('value', snap => {
     try {
       alarms = Array(5).fill(null);
@@ -132,6 +151,7 @@ function initializeData() {
 
       for (let i = 1; i <= 5; i++) {
         const alarm = alarmData[`alarm${i}`];
+        const card = document.getElementById(`alarmCard${i}`);
         if (alarm) {
           alarms[i - 1] = {
             id: i.toString(),
@@ -146,20 +166,25 @@ function initializeData() {
           elements.alarmHour[i].textContent = alarm.hour.toString().padStart(2, '0');
           elements.alarmMinute[i].textContent = alarm.minute.toString().padStart(2, '0');
           elements.alarmEnable[i].checked = alarm.enabled;
+          card.classList.toggle('active', alarm.enabled);
         } else {
           elements.alarmDay[i].textContent = "01";
           elements.alarmMonth[i].textContent = "01";
           elements.alarmHour[i].textContent = "00";
           elements.alarmMinute[i].textContent = "00";
           elements.alarmEnable[i].checked = false;
+          card.classList.remove('active');
         }
       }
     } catch (error) {
       console.error('Error processing alarm data:', error);
+      showToast('Error fetching alarm data', 'error');
     }
-  }, error => console.error('Error listening to alarms:', error));
+  }, error => {
+    console.error('Error listening to alarms:', error);
+    showToast('Alarm data connection failed', 'error');
+  });
 
-  // Initialize default sensor data if not exists
   database.ref('esp8266_data/sensors').once('value', snap => {
     if (!snap.exists()) {
       database.ref('esp8266_data/sensors').set({
@@ -171,7 +196,6 @@ function initializeData() {
     }
   });
 
-  // Initialize default alarms if not exists
   database.ref('esp8266_data/alarms').once('value', snap => {
     if (!snap.exists()) {
       const defaultAlarms = {};
@@ -191,13 +215,15 @@ function initializeData() {
   });
 }
 
-// Update display
 function updateDisplay(data) {
-  elements.temp.textContent = `${isNaN(data.temperature) ? 0.0 : data.temperature.toFixed(1)} °C`;
-  elements.humi.textContent = `${isNaN(data.humidity) ? 0.0 : data.humidity.toFixed(1)} %`;
+  const temp = isNaN(data.temperature) ? 0.0 : data.temperature.toFixed(1);
+  const humi = isNaN(data.humidity) ? 0.0 : data.humidity.toFixed(1);
+  elements.temp.textContent = `${temp} °C`;
+  elements.humi.textContent = `${humi} %`;
+  elements.temp.style.color = temp > 30 ? '#e74c3c' : temp < 20 ? '#3498db' : '#2c3e50';
+  elements.humi.style.color = humi > 70 ? '#e74c3c' : humi < 30 ? '#3498db' : '#2c3e50';
 }
 
-// Update charts
 function updateCharts() {
   tempChart.data.labels = sensorData.timestamps;
   tempChart.data.datasets[0].data = sensorData.temp;
@@ -208,7 +234,6 @@ function updateCharts() {
   humidityChart.update();
 }
 
-// Save alarm to Firebase
 function saveAlarm(alarmIndex) {
   const newAlarm = {
     day: parseInt(elements.alarmDay[alarmIndex].textContent) || 1,
@@ -218,7 +243,6 @@ function saveAlarm(alarmIndex) {
     enabled: elements.alarmEnable[alarmIndex].checked
   };
 
-  // Validate values
   newAlarm.day = Math.max(1, Math.min(31, newAlarm.day));
   newAlarm.month = Math.max(1, Math.min(12, newAlarm.month));
   newAlarm.hour = Math.max(0, Math.min(23, newAlarm.hour));
@@ -227,15 +251,15 @@ function saveAlarm(alarmIndex) {
   database.ref(`esp8266_data/alarms/alarm${alarmIndex}`).set(newAlarm)
     .then(() => {
       console.log(`Alarm ${alarmIndex} saved successfully`);
-      alert(`Alarm ${alarmIndex} has been saved!`);
+      showToast(`Alarm ${alarmIndex} saved!`);
+      document.getElementById(`alarmCard${alarmIndex}`).classList.toggle('active', newAlarm.enabled);
     })
     .catch(error => {
       console.error(`Error saving alarm ${alarmIndex}:`, error);
-      alert(`Error saving alarm ${alarmIndex}!`);
+      showToast(`Error saving alarm ${alarmIndex}!`, 'error');
     });
 }
 
-// Delete alarm from Firebase
 function deleteAlarm(alarmIndex) {
   const defaultAlarm = {
     day: 1,
@@ -248,34 +272,30 @@ function deleteAlarm(alarmIndex) {
   database.ref(`esp8266_data/alarms/alarm${alarmIndex}`).set(defaultAlarm)
     .then(() => {
       console.log(`Alarm ${alarmIndex} deleted successfully`);
-      alert(`Alarm ${alarmIndex} has been deleted!`);
-      elements.alarmDay[alarmIndex].textContent = "01";
-      elements.alarmMonth[alarmIndex].textContent = "01";
-      elements.alarmHour[alarmIndex].textContent = "00";
-      elements.alarmMinute[alarmIndex].textContent = "00";
-      elements.alarmEnable[alarmIndex].checked = false;
+      showToast(`Alarm ${alarmIndex} deleted!`);
+      document.getElementById(`alarmCard${alarmIndex}`).classList.remove('active');
     })
     .catch(error => {
       console.error(`Error deleting alarm ${alarmIndex}:`, error);
-      alert(`Error deleting alarm ${alarmIndex}!`);
+      showToast(`Error deleting alarm ${alarmIndex}!`, 'error');
     });
 }
 
-// Toggle alarm enable state
 function toggleAlarmEnable(alarmIndex) {
   const isEnabled = elements.alarmEnable[alarmIndex].checked;
   database.ref(`esp8266_data/alarms/alarm${alarmIndex}`).update({ enabled: isEnabled })
-    .then(() => console.log(`Alarm ${alarmIndex} enable state updated: ${isEnabled}`))
+    .then(() => {
+      console.log(`Alarm ${alarmIndex} enable state updated: ${isEnabled}`);
+      document.getElementById(`alarmCard${alarmIndex}`).classList.toggle('active', isEnabled);
+    })
     .catch(error => {
       console.error(`Error updating alarm ${alarmIndex} enable state:`, error);
-      alert(`Error updating alarm ${alarmIndex} enable state!`);
+      showToast(`Error updating alarm ${alarmIndex} enable state!`, 'error');
     });
 }
 
-// Adjust alarm settings
 function adjustAlarm(type, delta, alarmIndex) {
   let valueElement, minValue, maxValue;
-
   switch (type) {
     case 'day':
       valueElement = elements.alarmDay[alarmIndex];
@@ -303,20 +323,15 @@ function adjustAlarm(type, delta, alarmIndex) {
 
   let currentValue = parseInt(valueElement.textContent) || 0;
   let newValue = currentValue + delta;
-
-  if (newValue < minValue) newValue = minValue;
-  if (newValue > maxValue) newValue = maxValue;
-
+  newValue = Math.max(minValue, Math.min(maxValue, newValue));
   valueElement.textContent = newValue.toString().padStart(2, '0');
 }
 
-// Update clock
 function updateClock() {
   const now = new Date();
-  elements.time.textContent = now.toLocaleTimeString();
+  elements.time.textContent = now.toLocaleTimeString('en-US', { hour12: false });
 }
 
-// Initialize
 window.onload = () => {
   initializeData();
   setInterval(updateClock, 1000);
